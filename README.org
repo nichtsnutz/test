@@ -16,62 +16,65 @@ configurations. It is organized on the base of Amazon Accounts (AWS accounts) an
 We use =chef.environment= to indicate the chef environment.
 Where we use 'environment' if we mean any environment, be it Chef or AWS. 
 
-
+The idea is to write templates, that can be shared by all AWS accounts beeing
+parametrized according to environments.
  
 We create cf stacks by using generalized cf templates that can be
- - used by all environments regardless of the AWS account 
-(first layer under aws-base-cf-templates/)
- - parametrized by environment specific parameter files 
-(second layer under aws-xyz/=chef.environment=/)
- - DEPRECATED used by all environments within an AWS account 
-(second layer under aws-abc/ref-abc) 
+ - used by all environments regardless of the AWS account (under aws-base-cf-templates/)
+ - parametrized by environment specific parameter files (under aws-xyz/=chef.environment=/)
+ - DEPRECATED used by all environments within an AWS account (under aws-abc/ref-abc) 
 
-* First Layer corresponds to Amazon Accounts
-The directory aws-base-cf-templates contains cloud formation templates, that are shared
-by all environments in all AWS accounts.
+* First Layer: Amazon Accounts
+The first layer consists a subdirectory for each AWS account and one
+directory for base templates.
+** AWS accounts
+Naming convention: Use prefix aws- to avoid mix up with =chef.environments=.
+- aws-dev/ (environment specific subdirectories)
+- aws-stg/ (environment specific subdirectories)
+- aws-prd/ (environment specific subdirectories)
+
+** Base templates for all AWS accounts
+Directory 'aws-base-cf-templates/' contains cloud formation templates, that are *shared
+by all environments in all AWS accounts*.
 - aws-base-cf-templates/
 
-The directories aws-xyz contain environment specific cf parameter files.
-Naming convention: Use prefix aws- to avoid mix up with chef environment names.
-- aws-dev/
-- aws-stg/
-- aws-prd/
+* Second layer: =chef.environments=
+This layer contains directories for the =chef.environments= an templates that are shared within
+the enclosing AWS account.
 
-* Second layer corresponds to environments
-
-Naming convention: environment.
+** =chef.environments=
+Naming convention: =chef.environments=.
 
 Example for environment router-dublin-dev
 - aws-dev/router-dublin-dev/
-
-DEPRECATED: This layer also references templates, that are only used in the enclosing AWS account.
-for aws-dev/ref-dev/
-for aws-stg/ref-stg/
-for aws-prd/ref-prd/
-
 These directories contain cf templates that are shared by the
 environments inside the specific AWS account.
 
 
 =chef.environments= are threefold, constiting of a name, the AWS region and the AWS account.
-Currently there are 
- - appolo-dev
- - router-dublin-dev
- - router-origon-stg
- - router-integration-stg
- - dublin-stg
- - dublin-prod
 
-* Third layer contains the environment specific cloud formation parameter files.
-Example for the fabric autoscaling group in  aws-dev chef.environment router-dublin-dev:
-- aws-dev/router-dublin-dev/cf-vpc-asg-fabric-parameter-v-0-0-2.json
-Together with the base template aws-base-cf-templates/cf-vpc-asg-base-template-v-0-0-2.json 
-we create the fabric autoscaling cf stack.
+** shared within AWS accounts
+DEPRECATED: This layer also references templates, that are shared *only in the enclosing AWS account*.
+for aws-dev/ref-dev/
+for aws-stg/ref-stg/
+for aws-prd/ref-prd/
+
+
+* Third layer: parameter files.
+This layer contains parameter files to configure the base templates in the first layer.
 
 Naming convention parameter files: use base template name and replace '-template' 
 with '-parameter'. 
+File =cf-setup-environment-name.org= contains the documentation and CRUD commands. 
 
-File cf-setup-environment-name.org contains the documentation and CRUD commands. 
+Example for the fabric autoscaling group in aws-dev chef.environment router-dublin-dev:
+With the two templates:
+ - aws-base-cf-templates/cf-vpc-asg-base-template-v-0-0-2.json 
+ - aws-dev/router-dublin-dev/cf-vpc-asg-fabric-parameter-v-0-0-2.json
+we create the fabric autoscaling cf stack.
+
+
+
 
 
 
