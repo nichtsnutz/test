@@ -1,0 +1,58 @@
+#+LaTeX_CLASS: elemica-com-article
+#+TITLE: How to use this directory
+#+AUTHOR: Peter Frank, Michael Kloeckner
+#+DATE: 2015-10-19
+#+DESCRIPTION: How toorganize files in this directory
+#+EMAIL: pfrank@elemica.com
+#+KEYWORDS: Elemica 2.0
+#+LANGUAGE: english
+
+* Intro
+
+This directory contains the source and docu for our cloud formation
+configurations. It is organized on the base of Amazon Accounts and
+=chef.environments=. It should be easily to identify the used cloud formation templates for a given =chef.environment=.
+
+We create cf stacks by using generalizes cf templates that can be
+ - used by all environments regardless of the AWS account (first layer in aws-base-cf-templates/)
+ - parametrized by environment specific parameter files (second layer aws-xyz/environment-name/)
+ - DEPRECATED used by all environments within an AWS account (second layer aws-abc/ref-abc) 
+
+* First Layer corresponds to Amazon Accounts
+The directory aws-base-cf-templates contains cloud formation templates, that are shared
+by all environments in all AWS accounts.
+- aws-base-cf-templates/
+
+The directories aws-xyz contain environment specific cf parameter files.
+Naming convention: Use prefix aws- to avoid mix up with chef environment names.
+- aws-dev/
+- aws-stg/
+- aws-prd/
+
+* Second layer corresponds to environments
+
+Naming convention: environment
+Example for environment router-dublin-dev
+- aws-dev/router-dublin-dev/
+
+DEPRECATED: This layer also references templates, that are only used in the enclosing AWS account.
+for aws-dev/ref-dev/
+for aws-stg/ref-stg/
+for aws-prd/ref-prd/
+
+These directories contain cf templates that are shared by the
+environments inside the specific AWS account.
+
+* Third layer contains the environment specific cloud formation parameter files.
+Example for the fabric autoscaling group in  aws-dev chef.environment router-dublin-dev:
+- aws-dev/router-dublin-dev/cf-vpc-asg-fabric-parameter-v-0-0-2.json
+Together with the base template aws-base-cf-templates/cf-vpc-asg-base-template-v-0-0-2.json 
+we create the fabric autoscaling cf stack.
+
+Naming convention parameter files: use base template name and replace '-template' 
+with '-parameter'. 
+
+File cf-setup-environment-name.org contains the documentation and CRUD commands. 
+
+
+
