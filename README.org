@@ -10,12 +10,17 @@
 * Intro
 
 This directory contains the source and docu for our cloud formation
-configurations. It is organized on the base of Amazon Accounts and
-=chef.environments=. It should be easily to identify the used cloud formation templates for a given =chef.environment=.
+configurations. It is organized on the base of Amazon Accounts (AWS accounts) and
+=chef.environments=. It should be easy to identify the used cloud formation templates for a given =chef.environment=.
 
+We use =chef.environment= to indicate the chef environment.
+Where we use 'environment' we mean any environment, be it Chef or AWS. 
+
+
+ 
 We create cf stacks by using generalizes cf templates that can be
  - used by all environments regardless of the AWS account (first layer in aws-base-cf-templates/)
- - parametrized by environment specific parameter files (second layer aws-xyz/environment-name/)
+ - parametrized by environment specific parameter files (second layer aws-xyz/=chef.environment=/)
  - DEPRECATED used by all environments within an AWS account (second layer aws-abc/ref-abc) 
 
 * First Layer corresponds to Amazon Accounts
@@ -42,6 +47,16 @@ for aws-prd/ref-prd/
 
 These directories contain cf templates that are shared by the
 environments inside the specific AWS account.
+
+
+=chef.environments= are threefold, constiting of a name, the AWS region and the AWS account.
+Currently there are 
+ - appolo-dev
+ - router-dublin-dev
+ - router-origon-stg
+ - router-integration-stg
+ - dublin-stg
+ - dublin-prod
 
 * Third layer contains the environment specific cloud formation parameter files.
 Example for the fabric autoscaling group in  aws-dev chef.environment router-dublin-dev:
