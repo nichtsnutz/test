@@ -25,13 +25,14 @@ We create cf stacks by using generalized cf templates that can be
  - DEPRECATED used by all environments within an AWS account (under aws-abc/ref-abc) 
 
 * First Layer: Amazon Accounts
-The first layer consists a subdirectory for each AWS account and one
+The first layer consists of subdirectories for each AWS account and one
 directory for base templates.
 ** AWS accounts
-Naming convention: Use prefix aws- to avoid mix up with =chef.environments=.
-- aws-dev/ (environment specific subdirectories)
-- aws-stg/ (environment specific subdirectories)
-- aws-prd/ (environment specific subdirectories)
+Naming convention: Use prefix 'aws-' to avoid mix up with =chef.environments=.
+- aws-dev/ 
+- aws-stg/ 
+- aws-prd/ 
+Within each directory you find environment specific subdirectories.
 
 ** Base templates for all AWS accounts
 Directory 'aws-base-cf-templates/' contains cloud formation templates, that are *shared
@@ -39,7 +40,7 @@ by all environments in all AWS accounts*.
 - aws-base-cf-templates/
 
 * Second layer: =chef.environments=
-This layer contains directories for the =chef.environments= an templates that are shared within
+This layer contains directories for the =chef.environments= and direcotirs for templates that are shared within
 the enclosing AWS account.
 
 ** =chef.environments=
@@ -51,13 +52,13 @@ These directories contain cf templates that are shared by the
 environments inside the specific AWS account.
 
 
-=chef.environments= are threefold, constiting of a name, the AWS region and the AWS account.
+=chef.environments= names are threefold, constiting of a name, the AWS region and the AWS account.
 
 ** shared within AWS accounts
-DEPRECATED: This layer also references templates, that are shared *only in the enclosing AWS account*.
-for aws-dev/ref-dev/
-for aws-stg/ref-stg/
-for aws-prd/ref-prd/
+*DEPRECATED*: This layer also references templates, that are shared *only in the enclosing AWS account*.
+ - aws-dev/ref-dev/
+ - aws-stg/ref-stg/
+ - aws-prd/ref-prd/
 
 
 * Third layer: parameter files.
@@ -68,7 +69,8 @@ with '-parameter'.
 File =cf-setup-environment-name.org= contains the documentation and CRUD commands. 
 
 Example for the fabric autoscaling group in aws-dev chef.environment router-dublin-dev:
-With the two templates:
+
+With two templates:
  - aws-base-cf-templates/cf-vpc-asg-base-template-v-0-0-2.json 
  - aws-dev/router-dublin-dev/cf-vpc-asg-fabric-parameter-v-0-0-2.json
 we create the fabric autoscaling cf stack.
