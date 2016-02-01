@@ -1,4 +1,5 @@
-FROM debian:jessie
+#FROM debian:jessie
+FROM ubuntu:14.04
 
 # add our user and group first to make sure their IDs get assigned consistently, regardless of whatever dependencies get added
 #RUN groupadd -r www-data && useradd -r --create-home -g www-data www-data
@@ -59,6 +60,7 @@ RUN buildDeps=' \
 	&& apt-get purge -y --auto-remove $buildDeps
 
 COPY httpd-foreground /usr/local/bin/
+RUN apt-get install -y curl wget lynx
 
 EXPOSE 80
 CMD ["httpd-foreground"]
