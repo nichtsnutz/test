@@ -9,6 +9,7 @@ ENV PATH $PATH:$HTTPD_PREFIX/bin
 RUN mkdir -p "$HTTPD_PREFIX" \
 	&& chown www-data:www-data "$HTTPD_PREFIX"
 WORKDIR $HTTPD_PREFIX
+RUN echo "Installing APACHE"
 
 # install httpd runtime dependencies
 # https://httpd.apache.org/docs/2.4/install.html#requirements
